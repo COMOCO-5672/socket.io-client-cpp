@@ -56,6 +56,7 @@ namespace sio
     protected:
         enum con_state
         {
+            con_none,
             con_opening,
             con_opened,
             con_closing,
@@ -115,6 +116,10 @@ namespace sio
         void sync_close();
         
         bool opened() const { return m_con_state == con_opened; }
+
+        bool is_working() const { return m_con_state != con_none; }
+
+        bool is_opening() const { return m_con_state == con_opening; }
         
         std::string const& get_sessionid() const { return m_sid; }
 

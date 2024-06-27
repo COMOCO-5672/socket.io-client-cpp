@@ -35,7 +35,7 @@ namespace sio
         m_ping_interval(0),
         m_ping_timeout(0),
         m_network_thread(),
-        m_con_state(con_closed),
+        m_con_state(con_none),
         m_reconn_delay(5000),
         m_reconn_delay_max(25000),
         m_reconn_attempts(0xFFFFFFFF),
@@ -90,12 +90,15 @@ namespace sio
         }
         if(m_network_thread)
         {
-            if(m_con_state == con_closing||m_con_state == con_closed)
+            if(m_con_state == con_closing || m_con_state == con_closed)
             {
                 //if client is closing, join to wait.
                 //if client is closed, still need to join,
                 //but in closed case,join will return immediately.
-                m_network_thread->join();
+
+                if (m_network_thread->joinable())
+                    m_network_thread->join();
+
                 m_network_thread.reset();//defensive
             }
             else
@@ -104,6 +107,7 @@ namespace sio
                 return;
             }
         }
+
         m_con_state = con_opening;
         m_base_url = uri;
         m_reconn_made = 0;
