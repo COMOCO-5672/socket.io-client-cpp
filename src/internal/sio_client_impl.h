@@ -109,7 +109,10 @@ namespace sio
                      const std::map<std::string, std::string>& httpExtraHeaders, const message::ptr& auth);
         
         sio::socket::ptr const& socket(const std::string& nsp);
-        
+
+        // WARN::When in the state before connection or in the state of
+        // being connected, the "close()/sync_close()/~client_impl()"
+        // function cannot be called.
         // Closes the connection
         void close();
         

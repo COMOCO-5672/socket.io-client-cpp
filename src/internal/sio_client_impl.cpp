@@ -164,6 +164,9 @@ namespace sio
 
     void client_impl::close()
     {
+        if (m_con_state == con_none || m_con_state == con_opening)
+            return;
+
         m_con_state = con_closing;
         m_abort_retries = true;
         this->sockets_invoke_void(&sio::socket::close);
@@ -172,6 +175,9 @@ namespace sio
 
     void client_impl::sync_close()
     {
+        if (m_con_state == con_none || m_con_state == con_opening)
+            return;
+
         m_con_state = con_closing;
         m_abort_retries = true;
         this->sockets_invoke_void(&sio::socket::close);
